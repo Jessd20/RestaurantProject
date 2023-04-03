@@ -1,0 +1,27 @@
+<h1>Add a dish</h1>
+<form action="/admin/dish/add" method="post">
+
+    <input type="text" name="name" placeholder="Dish Name">
+    <input type="number" step=".01" name="price" placeholder="Dish Price">
+    <input type="text" name="url_image" placeholder="Dish Image">
+    <input type="text" name="is_available" placeholder="Dish State">
+
+    <button>Add</button>
+</form>
+
+<div>
+    {% for dish in dishes %}
+
+        <div>
+            <h3>{{ dish.name }}</h3>
+            <div>
+                <a href="{{ url_for('admin.update_dish', dish_id=dish.id)}}">Edit</a>
+                <a href="{{ url_for('admin.delete_dish', dish_id=dish.id)}}">Delete</a>
+            </div>
+            <p>{{ dish.price }}</p>
+            <p>{{ dish.url_image }}</p>
+            <p>{{ dish.is_active }}</p>
+        </div>
+
+    {% endfor %}
+</div>

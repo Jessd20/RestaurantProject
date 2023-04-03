@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, make_response, session, jsonify, redirect, url_for, current_app as app
-from models.restaurant import Admin
+from models.restaurant import Admin, Dish
 from utils.db import db
 from datetime import datetime, timedelta
 from functools import wraps
@@ -91,20 +91,62 @@ def check_token(func):
 
 @admin.route('/dish/add', methods=['GET'])
 @check_token
-def add_dishes(current_user):
-    return "add dishes"
+def add_dishes_get(current_user):
+    dishes = Dish.query.filter_by(admin_id=current_user.id).all()
+    return render_template("/admin/add_dish.html", dishes=dishes)
 
 
-@admin.route('/dish/update', methods=['GET'])
+@admin.route('/dish/add', methods=['POST'])
 @check_token
-def update_dishes(current_user):
-    return "update dishes"
+def add_dishes_post(current_user):
+    name = request.form.get('name')
+    price = request.form.get('price')
+    url_image = request.form.get('url_image')
+    is_available = request.form.get('is_available')
+    admin_id = current_user.id
+
+    new_dish = Dish(name, price, url_image, is_available, admin_id)
+
+    db.session.add(new_dish)
+    db.session.commit()
+
+    return "dish added"
 
 
-@admin.route('/dish/show', methods=['GET'])
+@admin.route('/dish/update/<dish_id>', methods=['GET'])
 @check_token
-def show_dishes(current_user):
-    return "show dishes"
+def update_dish_get(current_user, dish_id):
+    dish = Dish.query.get(dish_id)
+    if current_user.id != dish.admin_id:
+        return "dish not found"
+    else:
+        return render_template("/admin/update_dish.html", dish=dish)
+
+
+@admin.route('/dish/update/<dish_id>' , methods=['POST'])
+@check_token
+def update_dish(current_user, dish_id):
+    dish = Dish.query.get(dish_id)
+    dish.name = request.form.get('name')
+    dish.price = (request.form.get('price'))
+    dish.url_image = request.form.get('url_image')
+    dish.is_available = request.form.get('is_available')
+
+    db.session.commit()
+
+    return "dish updated"
+
+
+@admin.route('/dish/delete/<dish_id>')
+@check_token
+def delete_dish(current_user, dish_id):
+    dish = Dish.query.get(dish_id)
+    if dish.admin_id == current_user.id:
+        db.session.delete(dish)
+        db.session.commit()
+        return "dish deleted"
+    else:
+        return "dish not found"
 
 
 @admin.route('/dish/earnings', methods=['GET'])

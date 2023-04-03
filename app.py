@@ -1,6 +1,5 @@
 from flask import Flask
 from routes.admin import admin
-from flask_sqlalchemy import SQLAlchemy
 from utils.db import db
 
 app = Flask(__name__)
