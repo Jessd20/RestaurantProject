@@ -123,7 +123,7 @@ def update_dish_get(current_user, dish_id):
         return render_template("/admin/update_dish.html", dish=dish)
 
 
-@admin.route('/dish/update/<dish_id>' , methods=['POST'])
+@admin.route('/dish/update/<dish_id>', methods=['POST'])
 @check_token
 def update_dish(current_user, dish_id):
     dish = Dish.query.get(dish_id)

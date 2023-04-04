@@ -35,21 +35,22 @@ class Dish(db.Model):
         self.is_available = is_available
         self.admin_id = admin_id
 
+
 class Order(db.Model):
     __tablename__ = 'orders'
 
     id = db.Column(db.Integer, primary_key=True, index=True)
     name = db.Column(db.String(50), nullable=False)
-    amount = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.String, nullable=False)
     price = db.Column(db.String, nullable=False)
     total = db.Column(db.String, nullable=False)
     admin_id = db.Column(db.Integer, db.ForeignKey('admins.id'), nullable=False)
 
     admin = db.relationship('Admin', back_populates='orders')
 
-    def __init__(self, name, amount, price, total, admin_id):
+    def __init__(self, name, quantity, price, total, admin_id):
         self.name = name
-        self.amount = amount
+        self.quantity = quantity
         self.price = price
         self.total = total
         self.admin_id = admin_id

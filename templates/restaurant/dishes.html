@@ -1,0 +1,22 @@
+<h1>Order dishes</h1>
+<form action="/restaurants/{{restaurant_id}}/dishes" method="post">
+
+    <input type="text" name="dish_id" placeholder="Dish Id">
+    <input type="text" name="quantity" placeholder="Dish Quantity">
+
+    <button>Order</button>
+</form>
+
+<div>
+    {% for dish in dishes %}
+
+        <div>
+            <h3>{{ dish.name }}</h3>
+            <h3>Id: {{ dish.id }}</h3>
+            <p>{{ dish.price }}</p>
+            <p>{{ dish.url_image }}</p>
+            <p>{{ dish.is_active }}</p>
+        </div>
+
+    {% endfor %}
+</div>
