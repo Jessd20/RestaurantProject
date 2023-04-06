@@ -1,10 +1,7 @@
-from flask import Blueprint, render_template, request, make_response, session, jsonify, redirect, url_for, current_app as app
+from flask import Blueprint, render_template, request
 from models.restaurant import Admin, Dish, Order
 from utils.db import db
-from datetime import datetime, timedelta
-from functools import wraps
-import bcrypt
-import jwt
+
 
 restaurants = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 order_list = []

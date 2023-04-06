@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, make_response, session, jsonify, redirect, url_for, current_app as app
-from models.restaurant import Admin, Dish
+from flask import Blueprint, render_template, request, make_response, session, jsonify, current_app as app
+from models.restaurant import Admin, Dish, Order
 from utils.db import db
 from datetime import datetime, timedelta
 from functools import wraps
@@ -35,11 +35,15 @@ def register_post():
 
 @admin.route('/login', methods=['GET'])
 def login_get():
-    return render_template("/admin/login.html")
+    if session.get('logged_in'):
+        return 'You are already logged in'
+    else:
+        return render_template("/admin/login.html")
 
 
 @admin.route("/login", methods=['POST'])
 def login_post():
+
     username = request.form.get('username')
     password = request.form.get('password')
 
@@ -50,14 +54,14 @@ def login_post():
 
     encrypted_password = user.password.encode('utf-8')
     if bcrypt.checkpw(password.encode('utf-8'), encrypted_password):
-        session['logged_in'] = True
 
         token = jwt.encode({
             'user': request.form.get('username'),
-            'exp': int((datetime.utcnow() + timedelta(minutes=10)).timestamp())
+            'exp': int((datetime.utcnow() + timedelta(seconds=15)).timestamp())
         }, app.config['SECRET_KEY'], algorithm='HS256')
 
         session['token'] = token
+        session['logged_in'] = True
 
         return "logged in"
 
@@ -67,9 +71,12 @@ def login_post():
 
 @admin.route('/logout', methods=['GET'])
 def logout_get():
-    session.pop('token', None)
-    session.pop('logged_in', None)
-    return render_template("/admin/logout.html")
+    if not session.get('logged_in'):
+        return 'You are not logged in'
+    else:
+        session.pop('token', None)
+        session.pop('logged_in', None)
+        return render_template("/admin/logout.html")
 
 
 def check_token(func):
@@ -81,6 +88,10 @@ def check_token(func):
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             current_user = Admin.query.filter_by(username=data['user']).first()
+            if data['exp'] < datetime.utcnow().timestamp():
+                session.pop('token', None)
+                session.pop('logged_in', None)
+                return jsonify({'error': 'Token has expired!'}), 401
         except:
             return jsonify({'error': 'Token is invalid or has expired!'}), 401
 
@@ -152,5 +163,12 @@ def delete_dish(current_user, dish_id):
 @admin.route('/dish/earnings', methods=['GET'])
 @check_token
 def earnings(current_user):
-    return "show earnings"
+    orders = Order.query.filter_by(admin_id=current_user.id).all()
+    total_gain = 0
+    for order in orders:
+        total_gain += float(order.total)
+
+    total_gain = round(total_gain, 2)
+
+    return render_template("/admin/earning.html", orders=orders, total_gain=total_gain)
 

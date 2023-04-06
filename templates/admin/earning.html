@@ -1,0 +1,16 @@
+<h1>Earnings Report</h1>
+<div>
+    {% for order in orders %}
+
+        <div>
+            <h3>{{order.name}}</h3>
+            <p>Price: {{order.price}}</p>
+            <p>Quantity: {{order.quantity}}</p>
+            <p>Total: {{order.total}}</p>
+        </div>
+
+    {% endfor %}
+</div>
+<div>
+    <h3>Total Earnings: {{total_gain}}</h3>
+</div>
