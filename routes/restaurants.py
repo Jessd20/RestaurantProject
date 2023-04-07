@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request
 from models.restaurant import Admin, Dish, Order
 from utils.db import db
-
+import re
 
 restaurants = Blueprint('restaurants', __name__, url_prefix='/restaurants')
 order_list = []
@@ -17,6 +17,12 @@ def home():
 def dishes_get(restaurant_id):
     dishes = Dish.query.filter_by(admin_id=restaurant_id).filter_by(is_available="True").all()
     return render_template('/restaurant/dishes.html', dishes=dishes, restaurant_id=restaurant_id)
+
+
+def validate(quantity):
+
+    if not re.match(r'^\d+$', quantity):
+        return False
 
 
 @restaurants.route('/<restaurant_id>/dishes', methods=['POST'])
@@ -42,12 +48,12 @@ def dishes_post(restaurant_id):
 
 @restaurants.route('/dishes/buying')
 def buying():
-    message = "You ordered:"
+    message = "You ordered: \n"
 
     for order in order_list:
         db.session.add(order)
         db.session.commit()
-        message += " Dish: " + order.name + " Quantity: " + order.quantity + " Total: " + order.total
+        message += "Dish: " + order.name + "\nQuantity: " + order.quantity + "\nTotal: " + order.total + "\n\n"
 
     order_list.clear()
     return message

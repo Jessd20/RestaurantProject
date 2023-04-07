@@ -2,7 +2,7 @@
 <form action="/restaurants/{{restaurant_id}}/dishes" method="post">
 
     <input type="text" name="dish_id" placeholder="Dish Id">
-    <input type="text" name="quantity" placeholder="Dish Quantity">
+    <input type="number" name="quantity" placeholder="Dish Quantity">
 
     <button>Order</button>
 </form>
@@ -11,12 +11,13 @@
     {% for dish in dishes %}
 
         <div>
-            <h3>{{ dish.name }}</h3>
+            <hr>
+            <h3>Name: {{ dish.name }}</h3>
             <h3>Id: {{ dish.id }}</h3>
-            <p>{{ dish.price }}</p>
-            <p>{{ dish.url_image }}</p>
-            <p>{{ dish.is_active }}</p>
+            <p>Price: {{ dish.price }}</p>
+            <p>Available: {{ dish.is_active }}</p>
         </div>
 
     {% endfor %}
+     <hr>
 </div>

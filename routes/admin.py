@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 import bcrypt
 import jwt
+import re
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -21,11 +22,12 @@ def register_get():
 
 @admin.route('/register', methods=['POST'])
 def register_post():
+    restaurant = request.form.get('restaurant')
     username = request.form.get('username')
     password = request.form.get('password')
     encrypted_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    new_admin = Admin(username, encrypted_password.decode('utf-8'))
+    new_admin = Admin(restaurant,username, encrypted_password.decode('utf-8'))
 
     db.session.add(new_admin)
     db.session.commit()
@@ -57,7 +59,7 @@ def login_post():
 
         token = jwt.encode({
             'user': request.form.get('username'),
-            'exp': int((datetime.utcnow() + timedelta(seconds=15)).timestamp())
+            'exp': int((datetime.utcnow() + timedelta(minutes=5)).timestamp())
         }, app.config['SECRET_KEY'], algorithm='HS256')
 
         session['token'] = token
@@ -100,6 +102,14 @@ def check_token(func):
     return decorated
 
 
+def validate(available):
+
+    if available not in ('True', 'False'):
+        return False
+
+    return True
+
+
 @admin.route('/dish/add', methods=['GET'])
 @check_token
 def add_dishes_get(current_user):
@@ -116,12 +126,15 @@ def add_dishes_post(current_user):
     is_available = request.form.get('is_available')
     admin_id = current_user.id
 
-    new_dish = Dish(name, price, url_image, is_available, admin_id)
+    if validate(is_available) is False:
+        return "invalid input"
+    else:
+        new_dish = Dish(name, price, url_image, is_available, admin_id)
 
-    db.session.add(new_dish)
-    db.session.commit()
+        db.session.add(new_dish)
+        db.session.commit()
 
-    return "dish added"
+        return "dish added"
 
 
 @admin.route('/dish/update/<dish_id>', methods=['GET'])
@@ -142,6 +155,9 @@ def update_dish(current_user, dish_id):
     dish.price = (request.form.get('price'))
     dish.url_image = request.form.get('url_image')
     dish.is_available = request.form.get('is_available')
+
+    if validate(dish.price, dish.is_available) is False:
+        return "invalid input"
 
     db.session.commit()
 

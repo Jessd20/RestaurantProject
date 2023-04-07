@@ -4,8 +4,11 @@
     {% for restaurant in restaurants %}
 
         <div>
-            <h3>Restaurant{{ restaurant.id }}</h3>
+            <hr>
+            <h3>Restaurant: {{ restaurant.restaurant }}</h3>
+            <h3>Id: {{restaurant.id}}</h3>
         </div>
 
     {% endfor %}
+     <hr>
 </div>

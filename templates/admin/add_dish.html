@@ -13,15 +13,16 @@
     {% for dish in dishes %}
 
         <div>
-            <h3>{{ dish.name }}</h3>
+            <hr>
+            <h3>Dish: {{ dish.name }}</h3>
+            <p>Price: {{ dish.price }}</p>
+            <p>Available: {{ dish.is_active }}</p>
             <div>
                 <a href="{{ url_for('admin.update_dish', dish_id=dish.id)}}">Edit</a>
                 <a href="{{ url_for('admin.delete_dish', dish_id=dish.id)}}">Delete</a>
             </div>
-            <p>{{ dish.price }}</p>
-            <p>{{ dish.url_image }}</p>
-            <p>{{ dish.is_active }}</p>
         </div>
 
     {% endfor %}
+     <hr>
 </div>

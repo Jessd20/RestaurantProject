@@ -5,13 +5,15 @@ class Admin(db.Model):
     __tablename__ = 'admins'
 
     id = db.Column(db.Integer, primary_key=True, index=True)
+    restaurant = db.Column(db.String(50), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
 
     dishes = db.relationship('Dish', back_populates='admin')
     orders = db.relationship('Order', back_populates='admin')
 
-    def __init__(self, username, password):
+    def __init__(self, restaurant, username, password):
+        self.restaurant = restaurant
         self.username = username
         self.password = password
 
