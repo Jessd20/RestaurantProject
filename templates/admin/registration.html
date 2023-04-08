@@ -1,7 +1,9 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+
 <h1>Create an Account</h1>
 <form action="/admin/register" method="post">
 
-    <input type="text" name="restaurant" placeholder="Write your Restaurant's name"><br>
+    <input type="text" minlength="1" maxlength="50" name="restaurant" placeholder="Write your Restaurant's name"><br>
     <input type="text" name="username" placeholder="Write your username"><br>
     <input type="password" name="password" placeholder="Write your password"><br>
 

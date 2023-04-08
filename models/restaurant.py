@@ -25,16 +25,16 @@ class Dish(db.Model):
     name = db.Column(db.String(50), nullable=False)
     price = db.Column(db.String, nullable=False)
     url_image = db.Column(db.String, nullable=False)
-    is_available = db.Column(db.String, nullable=False)
+    status = db.Column(db.String, nullable=False)
     admin_id = db.Column(db.Integer, db.ForeignKey('admins.id'), nullable=False)
 
     admin = db.relationship('Admin', back_populates='dishes')
 
-    def __init__(self, name, price, url_image, is_available, admin_id):
+    def __init__(self, name, price, url_image, status, admin_id):
         self.name = name
         self.price = price
         self.url_image = url_image
-        self.is_available = is_available
+        self.status = status
         self.admin_id = admin_id
 
 

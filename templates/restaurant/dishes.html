@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/restaurant.css') }}">
+
 <h1>Order dishes</h1>
 <form action="/restaurants/{{restaurant_id}}/dishes" method="post">
 
@@ -15,7 +17,6 @@
             <h3>Name: {{ dish.name }}</h3>
             <h3>Id: {{ dish.id }}</h3>
             <p>Price: {{ dish.price }}</p>
-            <p>Available: {{ dish.is_active }}</p>
         </div>
 
     {% endfor %}

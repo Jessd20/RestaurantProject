@@ -1,11 +1,13 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+
 <h1>Update the dish</h1>
 
 <form action="/admin/dish/update/{{dish.id}}" method="post">
 
-    <input type="text" name="name" placeholder="Dish Name" value="{{dish.name}}">
+    <input type="text" minlength="1" maxlength="50" name="name" placeholder="Dish Name" value="{{dish.name}}">
     <input type="number" step=".01" name="price" placeholder="Dish Price" value="{{dish.price}}">
     <input type="text" name="url_image" placeholder="Dish Image" value="{{dish.url_image}}">
-    <input type="text" name="is_available" placeholder="Dish State" value="{{dish.is_available}}">
+    <input type="text" name="status" placeholder="Dish Status" value="{{dish.status}}" pattern="^(Available|Unavailable)$">
 
     <button>Update</button>
 </form>

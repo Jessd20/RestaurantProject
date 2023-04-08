@@ -41,3 +41,7 @@ The API provides the following endpoints:
 * `POST /restaurant/<restaurant_id>/dishes` - Order dishes from a restaurant.
 * `GET /restaurant/dishes/buying` - Get all dishes that have been ordered. 
 
+### Observations
+* The API endpoints are not secured. Anyone can access them.
+* The login session lasts for 5 minutes.
+* Values for 'Dish Status' are Available or Unavailable.

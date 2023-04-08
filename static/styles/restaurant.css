@@ -1,0 +1,68 @@
+/* dishes */
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+input {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #3e8e41;
+}
+
+div {
+  margin-top: 20px;
+}
+
+hr {
+  border: 1px solid gray;
+}
+
+h3 {
+  margin-top: 20px;
+}
+
+p {
+  margin-top: 10px;
+}
+
+/* home */
+h1 {
+  text-align: center;
+  margin-top: 20px;
+}
+
+div {
+  margin-top: 20px;
+}
+
+hr {
+  border: 1px solid gray;
+}
+
+h3 {
+  margin-top: 20px;
+}

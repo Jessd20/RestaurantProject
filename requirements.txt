@@ -5,4 +5,3 @@ bcrypt==4.0.1
 PyJWT==2.6.0
 datetime==5.1
 uuid==1.30
-pytest

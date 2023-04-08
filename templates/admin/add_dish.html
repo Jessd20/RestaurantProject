@@ -1,10 +1,13 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/admin.css') }}">
+
+
 <h1>Add a dish</h1>
 <form action="/admin/dish/add" method="post">
 
-    <input type="text" name="name" placeholder="Dish Name">
+    <input type="text" minlength="1" maxlength="50" name="name" placeholder="Dish Name">
     <input type="number" step=".01" name="price" placeholder="Dish Price">
     <input type="text" name="url_image" placeholder="Dish Image">
-    <input type="text" name="is_available" placeholder="Dish State">
+    <input type="text" name="status" placeholder="Dish Status" pattern="^(Available|Unavailable)$">
 
     <button>Add</button>
 </form>
@@ -16,7 +19,7 @@
             <hr>
             <h3>Dish: {{ dish.name }}</h3>
             <p>Price: {{ dish.price }}</p>
-            <p>Available: {{ dish.is_active }}</p>
+            <p>Status: {{ dish.status }}</p>
             <div>
                 <a href="{{ url_for('admin.update_dish', dish_id=dish.id)}}">Edit</a>
                 <a href="{{ url_for('admin.delete_dish', dish_id=dish.id)}}">Delete</a>

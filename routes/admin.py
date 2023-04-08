@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from functools import wraps
 import bcrypt
 import jwt
-import re
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -102,14 +101,6 @@ def check_token(func):
     return decorated
 
 
-def validate(available):
-
-    if available not in ('True', 'False'):
-        return False
-
-    return True
-
-
 @admin.route('/dish/add', methods=['GET'])
 @check_token
 def add_dishes_get(current_user):
@@ -123,18 +114,15 @@ def add_dishes_post(current_user):
     name = request.form.get('name')
     price = request.form.get('price')
     url_image = request.form.get('url_image')
-    is_available = request.form.get('is_available')
+    status = request.form.get('status')
     admin_id = current_user.id
 
-    if validate(is_available) is False:
-        return "invalid input"
-    else:
-        new_dish = Dish(name, price, url_image, is_available, admin_id)
+    new_dish = Dish(name, price, url_image, status, admin_id)
 
-        db.session.add(new_dish)
-        db.session.commit()
+    db.session.add(new_dish)
+    db.session.commit()
 
-        return "dish added"
+    return "dish added"
 
 
 @admin.route('/dish/update/<dish_id>', methods=['GET'])
@@ -154,10 +142,7 @@ def update_dish(current_user, dish_id):
     dish.name = request.form.get('name')
     dish.price = (request.form.get('price'))
     dish.url_image = request.form.get('url_image')
-    dish.is_available = request.form.get('is_available')
-
-    if validate(dish.price, dish.is_available) is False:
-        return "invalid input"
+    dish.status = request.form.get('status')
 
     db.session.commit()
 
@@ -187,4 +172,3 @@ def earnings(current_user):
     total_gain = round(total_gain, 2)
 
     return render_template("/admin/earning.html", orders=orders, total_gain=total_gain)
-
